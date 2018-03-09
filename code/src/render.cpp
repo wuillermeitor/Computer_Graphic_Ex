@@ -196,6 +196,7 @@ namespace MyFirstShader {
 		static const GLchar * geom_shader_source[] =
 		{
 			"#version 330\n\
+			uniform float time;\n\
 			layout(triangles) in;\n\
 			layout(triangle_strip, max_vertices = 3) out;\n\
 			const vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),\n\
@@ -203,7 +204,7 @@ namespace MyFirstShader {
 											vec4( -0.25,  -0.25, 0.5, 1.0));\n\
 			void main(){\n\
 				for(int i=0;i<3;++i){\n\
-					gl_Position = gl_in[i].gl_Position+vec4( 0.5, 0.5, 0.0, 0.0);\n\
+					gl_Position = gl_in[i].gl_Position+vec4( sin(time), 0.5, 0.0, 0.0);\n\
 					EmitVertex();\n\
 				}\n\
 			EndPrimitive();\n\
@@ -260,6 +261,7 @@ namespace MyFirstShader {
 	void myRenderCode(double currentTime) {
 
 		glUseProgram(myRenderProgram);
+		glUniform1f(glGetUniformLocation(myRenderProgram, "time"), (GLfloat)currentTime);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 }
