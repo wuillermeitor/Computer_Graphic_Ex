@@ -208,12 +208,12 @@ namespace MyFirstShader {
 
 		static const GLchar * vertex_shader_source[] =
 		{
-			"#version 330													\n\
-		void main() {														\n\
-		const vec4 vertices[3] = vec4[3](	vec4( 0.25,-0.25, 0.5, 1.0),	\n\
-											vec4( 0.25, 0.25, 0.5, 1.0),	\n\
-											vec4(-0.25,-0.25, 0.5, 1.0));	\n\
-		gl_Position = vertices[gl_VertexID];								\n\
+			"#version 330														\n\
+		void main() {															\n\
+			const vec4 vertices[3] = vec4[3](	vec4( 0.25,-0.25, 0.5, 1.0),	\n\
+												vec4( 0.25, 0.25, 0.5, 1.0),	\n\
+												vec4(-0.25,-0.25, 0.5, 1.0));	\n\
+			gl_Position = vertices[gl_VertexID];								\n\
 		}" 
 		};
 
@@ -229,7 +229,7 @@ namespace MyFirstShader {
 													vec4(-0.25,-0.25, 0.5, 1.0),	\n\
 													vec4(-0.25, 0.25, 0.5, 1.0));	\n\
 				for (int i = 0; i < 4; ++i) {										\n\
-					gl_Position = vertices[i] + gl_in[0].gl_Position;				\n\
+					gl_Position = (vertices[i] * vec4(cos(time), 1.0, sin(time), 1.0)) + gl_in[0].gl_Position;				\n\
 					EmitVertex();													\n\
 				}																	\n\
 				EndPrimitive();														\n\
