@@ -181,36 +181,60 @@ namespace MyFirstShader {
 	}
 
 	GLuint myShaderCompile(void) {
+
+		//static const GLchar * geom_shader_source[] =
+		//{
+		//	"#version 330\n\
+		//	uniform float time;\n\
+		//	layout(triangles) in;\n\
+		//	layout(triangle_strip, max_vertices = 6) out;\n\
+		//	const vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),\n\
+		//								   vec4(0.25, 0.25, 0.5, 1.0),\n\
+		//									vec4( -0.25,  -0.25, 0.5, 1.0));\n\
+		//	void main(){\n\
+		//		vec4 offset = vec4(0.5-sin(time*2), 0.5, 0.0, 0.0);\n\
+		//		for(int i=0;i<3;++i){\n\
+		//			gl_Position = gl_in[i].gl_Position+offset;\n\
+		//			EmitVertex();\n\
+		//		}\n\
+		//	EndPrimitive();\n\
+		//		for(int i=0;i<3;++i){\n\
+		//			gl_Position = gl_in[i].gl_Position-offset;\n\
+		//			EmitVertex();\n\
+		//		}\n\
+		//	EndPrimitive();\n\
+		//	}"
+		//};
+
 		static const GLchar * vertex_shader_source[] =
 		{
-			"#version 330										\n\
-			\n\
-			void main() {\n\
-			const vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),\n\
-										   vec4(0.25, 0.25, 0.5, 1.0),\n\
-											vec4( -0.25,  -0.25, 0.5, 1.0));\n\
-			gl_Position = vertices[gl_VertexID];\n\
-			}"
+			"#version 330													\n\
+		void main() {														\n\
+		const vec4 vertices[3] = vec4[3](	vec4( 0.25,-0.25, 0.5, 1.0),	\n\
+											vec4( 0.25, 0.25, 0.5, 1.0),	\n\
+											vec4(-0.25,-0.25, 0.5, 1.0));	\n\
+		gl_Position = vertices[gl_VertexID];								\n\
+		}" 
 		};
+
 
 		static const GLchar * geom_shader_source[] =
-		{
-			"#version 330\n\
-			uniform float time;\n\
-			layout(triangles) in;\n\
-			layout(triangle_strip, max_vertices = 3) out;\n\
-			const vec4 vertices[3] = vec4[3](vec4( 0.25, -0.25, 0.5, 1.0),\n\
-										   vec4(0.25, 0.25, 0.5, 1.0),\n\
-											vec4( -0.25,  -0.25, 0.5, 1.0));\n\
-			void main(){\n\
-				for(int i=0;i<3;++i){\n\
-					gl_Position = gl_in[i].gl_Position+vec4( sin(time), 0.5, 0.0, 0.0);\n\
-					EmitVertex();\n\
-				}\n\
-			EndPrimitive();\n\
-			}"
+		{ "#version 330																\n\
+			uniform float time;														\n\
+			layout(triangles) in;													\n\
+			layout(triangle_strip, max_vertices = 6) out;							\n\
+			void main() {															\n\
+				const vec4 vertices[4] = vec4[4](	vec4( 0.25,-0.25, 0.5, 1.0),	\n\
+													vec4( 0.25, 0.25, 0.5, 1.0),	\n\
+													vec4(-0.25,-0.25, 0.5, 1.0),	\n\
+													vec4(-0.25, 0.25, 0.5, 1.0));	\n\
+				for (int i = 0; i < 4; ++i) {										\n\
+					gl_Position = vertices[i] + gl_in[0].gl_Position;				\n\
+					EmitVertex();													\n\
+				}																	\n\
+				EndPrimitive();														\n\
+		}" 
 		};
-
 		static const GLchar * fragment_shader_source[] =
 		{
 			"#version 330\n\
