@@ -218,23 +218,46 @@ namespace MyFirstShader {
 		};
 
 
+		//static const GLchar * geom_shader_source[] =
+		//{
+		//	"#version 330																						\n\
+		//	uniform float time;																					\n\
+		//	layout(triangles) in;																				\n\
+		//	layout(triangle_strip, max_vertices = 4) out;														\n\
+		//	void main() {																						\n\
+		//		const vec4 vertices[4] = vec4[4](	vec4( 0.25,-0.25, 0.5, 1.0),								\n\
+		//											vec4( 0.25, 0.25, 0.5, 1.0),								\n\
+		//											vec4(-0.25,-0.25, 0.5, 1.0),								\n\
+		//											vec4(-0.25, 0.25, 0.5, 1.0));								\n\
+		//		for (int i = 0; i < 4; ++i) {																	\n\
+		//			gl_Position = (vertices[i] * vec4(cos(time), 1.0, sin(time), 1.0)) + gl_in[0].gl_Position;	\n\
+		//			EmitVertex();																				\n\
+		//		}																								\n\
+		//		EndPrimitive();																					\n\
+		//	}"
+		//};
+
 		static const GLchar * geom_shader_source[] =
-		{ "#version 330																\n\
-			uniform float time;														\n\
-			layout(triangles) in;													\n\
-			layout(triangle_strip, max_vertices = 6) out;							\n\
-			void main() {															\n\
-				const vec4 vertices[4] = vec4[4](	vec4( 0.25,-0.25, 0.5, 1.0),	\n\
-													vec4( 0.25, 0.25, 0.5, 1.0),	\n\
-													vec4(-0.25,-0.25, 0.5, 1.0),	\n\
-													vec4(-0.25, 0.25, 0.5, 1.0));	\n\
-				for (int i = 0; i < 4; ++i) {										\n\
-					gl_Position = (vertices[i] * vec4(cos(time), 1.0, sin(time), 1.0)) + gl_in[0].gl_Position;				\n\
-					EmitVertex();													\n\
-				}																	\n\
-				EndPrimitive();														\n\
-		}" 
+		{
+			"#version 330																						\n\
+			uniform float time;																					\n\
+			uniform mat4 rotation; \n\																			\n\
+			layout(triangles) in;																				\n\
+			layout(triangle_strip, max_vertices = 4) out;														\n\
+			const vec4 vertices[4] =	vec4[4](vec4( 0.25,-0.25, 0.5, 1.0),									\n\
+												vec4( 0.25, 0.25, 0.5, 1.0),									\n\
+												vec4(-0.25,-0.25, 0.5, 1.0),									\n\
+												vec4(-0.25, 0.25, 0.5, 1.0));									\n\
+			void main() {																						\n\
+				for (int i = 0; i < 4; ++i) {																	\n\
+					gl_Position = (rotation * vertices[i] ) + gl_in[0].gl_Position;								\n\
+					EmitVertex();																				\n\
+				}																								\n\
+				EndPrimitive();																					\n\
+			}"
 		};
+		
+
 		static const GLchar * fragment_shader_source[] =
 		{
 			"#version 330\n\
@@ -245,7 +268,6 @@ namespace MyFirstShader {
 			color = vec4(0.0,0.8,1.0,1.0);\n\
 			}"
 		};
-
 
 		GLuint vertex_shader;
 		GLuint fragment_shader;
@@ -282,12 +304,30 @@ namespace MyFirstShader {
 		glCreateVertexArrays(1, &myVAO);
 		glBindVertexArray(myVAO);
 	}
+	//void myRenderCode(double currentTime) {
+	//	glm::vec4 vertices[4] = { glm::vec4(0.25*cos(currentTime),-0.25, 0.5*sin(currentTime), 1.0),
+	//											glm::vec4(0.25*cos(currentTime), 0.25, 0.5*sin(currentTime), 1.0),
+	//											glm::vec4(-0.25*cos(currentTime),-0.25, 0.5*sin(currentTime), 1.0),
+	//											glm::vec4(-0.25*cos(currentTime), 0.25, 0.5*sin(currentTime), 1.0) };
+
+	//	glUseProgram(myRenderProgram);
+	//	glUniform1f(glGetUniformLocation(myRenderProgram, "time"), (GLfloat)currentTime);
+	//	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//}
 	void myRenderCode(double currentTime) {
 
 		glUseProgram(myRenderProgram);
-		glUniform1f(glGetUniformLocation(myRenderProgram, "time"), (GLfloat)currentTime);
+		glm::mat4 rotation = {	cos(currentTime), 0.f, -sin(currentTime), 0.f,
+								0.f, 1.f, 0.f, 0.f,
+								sin(currentTime), 0.f, cos(currentTime), 0.f,
+								0.f, 0.f, 0.f, 1.f };
+		//glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
+		glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+
 	}
+
 }
 
 
