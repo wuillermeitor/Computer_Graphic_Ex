@@ -243,7 +243,7 @@ namespace MyFirstShader {
 			uniform float time;																					\n\
 			uniform mat4 rotation; \n\																			\n\
 			layout(triangles) in;																				\n\
-			layout(triangle_strip, max_vertices = 4) out;														\n\
+			layout(triangle_strip, max_vertices = 8) out;														\n\
 			const vec4 vertices[4] =	vec4[4](vec4( 0.25,-0.25, 0.5, 1.0),									\n\
 												vec4( 0.25, 0.25, 0.5, 1.0),									\n\
 												vec4(-0.25,-0.25, 0.5, 1.0),									\n\
@@ -251,6 +251,11 @@ namespace MyFirstShader {
 			void main() {																						\n\
 				for (int i = 0; i < 4; ++i) {																	\n\
 					gl_Position = (rotation * vertices[i] ) + gl_in[0].gl_Position;								\n\
+					EmitVertex();																				\n\
+				}																								\n\
+				EndPrimitive();																					\n\
+				for (int i = 0; i < 4; ++i) {																	\n\
+					gl_Position = (rotation * vertices[i] ) + gl_in[0].gl_Position + 2;							\n\
 					EmitVertex();																				\n\
 				}																								\n\
 				EndPrimitive();																					\n\
@@ -324,8 +329,6 @@ namespace MyFirstShader {
 		//glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
 		glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-
 	}
 
 }
