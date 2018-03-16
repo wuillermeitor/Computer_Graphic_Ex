@@ -241,21 +241,68 @@ namespace MyFirstShader {
 		{
 			"#version 330																						\n\
 			uniform float time;																					\n\
-			uniform mat4 rotation; \n\																			\n\
+			uniform float size;																					\n\
+			uniform mat4 rotation;																				\n\
 			layout(triangles) in;																				\n\
-			layout(triangle_strip, max_vertices = 8) out;														\n\
-			const vec4 vertices[4] =	vec4[4](vec4( 0.25,-0.25, 0.5, 1.0),									\n\
-												vec4( 0.25, 0.25, 0.5, 1.0),									\n\
-												vec4(-0.25,-0.25, 0.5, 1.0),									\n\
-												vec4(-0.25, 0.25, 0.5, 1.0));									\n\
+			layout(triangle_strip, max_vertices = 24) out;														\n\
 			void main() {																						\n\
+				const vec4 vertices[4] =	vec4[4](vec4( 0.25,-0.25, 0.25, 1.0),								\n\
+													vec4( 0.25, 0.25, 0.25, 1.0),								\n\
+													vec4(-0.25,-0.25, 0.25, 1.0),								\n\
+													vec4(-0.25, 0.25, 0.25, 1.0));								\n\
 				for (int i = 0; i < 4; ++i) {																	\n\
 					gl_Position = (rotation * vertices[i] ) + gl_in[0].gl_Position;								\n\
+					gl_PrimitiveID = 0;\n\
 					EmitVertex();																				\n\
 				}																								\n\
 				EndPrimitive();																					\n\
+				const vec4 vertices2[4] =	vec4[4](vec4(-0.25,-0.25, -0.25, 1.0),								\n\
+													vec4(-0.25, 0.25, -0.25, 1.0),								\n\
+													vec4( 0.25,-0.25, -0.25, 1.0),								\n\
+													vec4( 0.25, 0.25, -0.25, 1.0));								\n\
 				for (int i = 0; i < 4; ++i) {																	\n\
-					gl_Position = (rotation * vertices[i] ) + gl_in[0].gl_Position + 2;							\n\
+					gl_Position = (rotation * vertices2[i] ) + gl_in[0].gl_Position;							\n\
+					gl_PrimitiveID = 1;\n\
+					EmitVertex();																				\n\
+				}																								\n\
+				EndPrimitive();																					\n\
+				const vec4 vertices3[4] =	vec4[4](vec4( -0.25,-0.25, 0.25, 1.0),								\n\
+													vec4( -0.25, 0.25, 0.25, 1.0),								\n\
+													vec4(-0.25,-0.25, -0.25, 1.0),								\n\
+													vec4(-0.25, 0.25, -0.25, 1.0));								\n\
+				for (int i = 0; i < 4; ++i) {																	\n\
+					gl_Position = (rotation * vertices3[i] ) + gl_in[0].gl_Position;							\n\
+					gl_PrimitiveID = 2;\n\
+					EmitVertex();																				\n\
+				}																								\n\
+				EndPrimitive();																					\n\
+				const vec4 vertices4[4] =	vec4[4](vec4( 0.25,-0.25, -0.25, 1.0),								\n\
+													vec4( 0.25, 0.25, -0.25, 1.0),								\n\
+													vec4(0.25,-0.25, 0.25, 1.0),								\n\
+													vec4(0.25, 0.25, 0.25, 1.0));								\n\
+				for (int i = 0; i < 4; ++i) {																	\n\
+					gl_Position = (rotation * vertices4[i] ) + gl_in[0].gl_Position;							\n\
+					gl_PrimitiveID = 3;\n\
+					EmitVertex();																				\n\
+				}																								\n\
+				EndPrimitive();																					\n\
+				const vec4 vertices5[4] =	vec4[4](vec4(0.25,0.25, 0.25, 1.0),								\n\
+													vec4( 0.25, 0.25, -0.25, 1.0),								\n\
+													vec4(-0.25,0.25, 0.25, 1.0),								\n\
+													vec4(-0.25, 0.25, -0.25, 1.0));								\n\
+				for (int i = 0; i < 4; ++i) {																	\n\
+					gl_Position = (rotation * vertices5[i] ) + gl_in[0].gl_Position;							\n\
+					gl_PrimitiveID = 4;\n\
+					EmitVertex();																				\n\
+				}																								\n\
+				EndPrimitive();																					\n\
+				const vec4 vertices6[4] =	vec4[4](vec4( 0.25,-0.25, -0.25, 1.0),								\n\
+													vec4( 0.25, -0.25, 0.25, 1.0),								\n\
+													vec4(-0.25,-0.25, -0.25, 1.0),								\n\
+													vec4(-0.25, -0.25, 0.25, 1.0));								\n\
+				for (int i = 0; i < 4; ++i) {																	\n\
+					gl_Position = (rotation * vertices6[i] ) + gl_in[0].gl_Position;							\n\
+					gl_PrimitiveID = 5;\n\
 					EmitVertex();																				\n\
 				}																								\n\
 				EndPrimitive();																					\n\
@@ -270,7 +317,13 @@ namespace MyFirstShader {
 			out vec4 color;\n\
 			\n\
 			void main() {\n\
-			color = vec4(0.0,0.8,1.0,1.0);\n\
+				const vec4 colors[6] = vec4[6](	vec4(1.0,1.0,1.0,1.0),\n\
+												vec4(1.0,1.0,0.0,1.0),\n\
+												vec4(1.0,0.0,0.0,1.0),\n\
+												vec4(0.0,0.0,0.0,1.0),\n\
+												vec4(0.0,1.0,1.0,1.0),\n\
+												vec4(0.0,0.0,1.0,1.0));\n\
+				color=colors[gl_PrimitiveID];\n\
 			}"
 		};
 
@@ -320,14 +373,15 @@ namespace MyFirstShader {
 	//	glDrawArrays(GL_TRIANGLES, 0, 3);
 	//}
 	void myRenderCode(double currentTime) {
-
+		double size = 0.25;
 		glUseProgram(myRenderProgram);
-		glm::mat4 rotation = {	cos(currentTime), 0.f, -sin(currentTime), 0.f,
-								0.f, 1.f, 0.f, 0.f,
-								sin(currentTime), 0.f, cos(currentTime), 0.f,
-								0.f, 0.f, 0.f, 1.f };
-		//glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
-		glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
+		glm::mat4 rotation = {	cos(currentTime),	0.f, -sin(currentTime), 0.f,
+								0.f,				1.f, 0.f,				0.f,
+								sin(currentTime),	0.f, cos(currentTime),	0.f,
+								0.f,				0.f, 0.f,				1.f	};
+		glUniform1f(glGetUniformLocation(myRenderProgram, "size"), (GLfloat)size);
+		glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
+		//glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 
