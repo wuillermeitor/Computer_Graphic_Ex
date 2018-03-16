@@ -317,12 +317,12 @@ namespace MyFirstShader {
 			out vec4 color;\n\
 			\n\
 			void main() {\n\
-				const vec4 colors[6] = vec4[6](	vec4(1.0,1.0,1.0,1.0),\n\
+				const vec4 colors[6] = vec4[6](	vec4(1.0,0.0,0.0,1.0),\n\
+												vec4(0.0,1.0,0.0,1.0),\n\
+												vec4(0.0,0.0,1.0,1.0),\n\
 												vec4(1.0,1.0,0.0,1.0),\n\
-												vec4(1.0,0.0,0.0,1.0),\n\
-												vec4(0.0,0.0,0.0,1.0),\n\
-												vec4(0.0,1.0,1.0,1.0),\n\
-												vec4(0.0,0.0,1.0,1.0));\n\
+												vec4(1.0,0.0,1.0,1.0),\n\
+												vec4(0.0,1.0,1.0,1.0));\n\
 				color=colors[gl_PrimitiveID];\n\
 			}"
 		};
@@ -380,8 +380,8 @@ namespace MyFirstShader {
 								sin(currentTime),	0.f, cos(currentTime),	0.f,
 								0.f,				0.f, 0.f,				1.f	};
 		glUniform1f(glGetUniformLocation(myRenderProgram, "size"), (GLfloat)size);
-		glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
-		//glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
+		//glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(rotation));
+		glUniformMatrix4fv(glGetUniformLocation(myRenderProgram, "rotation"), 1, GL_FALSE, glm::value_ptr(RV::_MVP));
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 
